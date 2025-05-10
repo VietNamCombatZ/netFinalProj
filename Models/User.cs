@@ -6,7 +6,8 @@ namespace finalProject.Models;
 public class User
 {
     [Key]
-    public required  int UserId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public  int UserId { get; set; }
 
     [Required]
     public required string Name { get; set; }

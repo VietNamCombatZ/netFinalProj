@@ -1,0 +1,58 @@
+@model finalProject.Models.Article
+@using finalProject.Models.Enums
+
+@{
+    ViewData["Title"] = "Chi tiết bài viết";
+}
+
+<h2>Chi tiết bài viết</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">@Model.Title</h3>
+        <h5 class="card-subtitle mb-2 text-muted">Chủ đề: @Model.Topic?.TopicName</h5>
+        <p class="card-text"><strong>Tóm tắt:</strong> @Model.Summary</p>
+        <p class="card-text"><strong>Nội dung:</strong></p>
+        <div class="border p-2" style="white-space: pre-wrap">@Model.Content</div>
+
+        <hr />
+
+        <p>
+            <strong>Trạng thái:</strong>
+            @if (Model.Status == ArticleStatus.Pending)
+            {
+                <span class="badge bg-warning">Chờ duyệt</span>
+            }
+            else if (Model.Status == ArticleStatus.Approved)
+            {
+                <span class="badge bg-success">Đã duyệt</span>
+            }
+            else if (Model.Status == ArticleStatus.Rejected)
+            {
+                <span class="badge bg-danger">Bị từ chối</span>
+            }
+        </p>
+
+        <p><strong>Ngày gửi:</strong> @Model.SubmissionDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+        @if (Model.ReviewedAt != null)
+        {
+            <p>
+                <strong>Ngày duyệt/từ chối:</strong> @Model.ReviewedAt?.ToString("dd/MM/yyyy HH:mm")
+            </p>
+        }
+
+        <div>
+            @if (Model.Status == ArticleStatus.Pending)
+            {
+                <form method="post" asp-action="ApproveOrReject" asp-controller="Articles">
+                    <input type="hidden" name="id" value="@Model.ArticleId" />
+                    <button type="submit" name="action" value="approve" class="btn btn-success">Duyệt</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger">Từ chối</button>
+                </form>
+            }
+        </div>
+
+        <a class="btn btn-secondary mt-3" asp-action="PendingArticles" asp-controller="Users">Quay lại danh sách</a>
+    </div>
+</div>
