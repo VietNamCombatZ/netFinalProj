@@ -28,4 +28,6 @@ public class User
     [Required]
     [Column(TypeName = "varchar(50)")]
     public Role Role { get; set; } // 👉 enum luôn nè
+    
+    public virtual ICollection<Article>? Articles { get; set; }
 }

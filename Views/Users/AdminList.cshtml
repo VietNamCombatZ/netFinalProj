@@ -1,18 +1,35 @@
-@model TModel
+@model IEnumerable<finalProject.Models.User>
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div class="w-100 text-center">
+    <h2>Danh sách Admin</h2>
 </div>
-</body>
-</html>
+
+<a class="btn btn-primary mb-3" asp-action="CreateAdmin">➕ Thêm Admin</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Tên đăng nhập</th>
+        <th>Email</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @foreach (var admin in Model)
+    {
+        <tr>
+            <td>@admin.Username</td>
+            <td>@admin.Email</td>
+            <td>
+                <form method="post" asp-action="DeleteAdmin" asp-route-id="@admin.UserId" onsubmit="return confirm('Xoá admin này?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Xoá</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

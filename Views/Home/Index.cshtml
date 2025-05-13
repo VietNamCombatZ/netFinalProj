@@ -1,8 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang Chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="jumbotron text-center bg-light p-5 rounded">
+        <h1 class="display-4">Hệ thống Quản lý Bài viết Khoa học</h1>
+        <p class="lead mt-3">
+            Nền tảng cho phép tác giả gửi bài nghiên cứu, chỉnh sửa, và quản trị viên duyệt nội dung trước khi xuất bản trên tạp chí.
+        </p>
+        <hr class="my-4" />
+        <p>
+            Hãy đăng ký tài khoản để bắt đầu gửi bài viết khoa học của bạn.
+        </p>
+        <a class="btn btn-primary btn-lg me-2" href="/Users/Login">Đăng nhập</a>
+        <a class="btn btn-success btn-lg" href="/Users/Register">Đăng ký</a>
+    </div>
 </div>

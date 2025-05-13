@@ -1,18 +1,33 @@
-@model TModel
+@model IEnumerable<finalProject.Models.Article>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h2>Bài viết chờ duyệt</h2>
 
-<!DOCTYPE html>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Tiêu đề</th>
+        <th>Tác giả</th>
+        <th>Ngày gửi</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var article in Model)
+    {
+        <tr>
+            <td>@article.Title</td>
+            <td>@article.Author?.Username</td>
+            <td>@article.SubmissionDate.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a class="btn btn-sm btn-info" asp-action="DetailsForAdmin" asp-controller="Articles" asp-route-id="@article.ArticleId">Xem chi tiết</a>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+

@@ -1,18 +1,26 @@
-@model TModel
-
 @{
-    Layout = null;
+    ViewData["Title"] = "Thêm Admin";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
+<h2>Thêm Admin</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="CreateAdmin" method="post">
+    <div class="mb-3">
+        <label for="username" class="form-label">Tên đăng nhập:</label>
+        <input type="text" class="form-control" id="username" name="username" required />
+    </div>
+
+    @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <div class="alert alert-danger">@modelError.ErrorMessage</div>
+    }
+
+    <button type="submit" class="btn btn-success">Xác nhận</button>
+    <a class="btn btn-secondary" asp-action="AdminList">Quay lại</a>
+</form>

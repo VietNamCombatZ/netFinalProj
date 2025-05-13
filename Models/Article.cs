@@ -5,8 +5,16 @@ namespace finalProject.Models;
 
 public class Article
 {
+    public Article()
+    {
+        SubmissionDate = DateTime.Now;
+    }
+
     [Key]
-    public required  int ArticleId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public   int ArticleId { get; set; }
+    
+    public DateTime? ReviewedAt { get; set; } // Nullable vì chưa duyệt thì sẽ là null
     
     [Required]
     [StringLength(255)]
@@ -24,15 +32,20 @@ public class Article
     [Required]
     public required  string Content { get; set; }
     
-    [Required]
-    public required  string Topic { get; set; }
-    
+    // [Required]
+    // public required  string Topic { get; set; }
+
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public required  ArticleStatus Status { get; set; }// "Pending", "Approved", "Rejected"
+    public required ArticleStatus Status { get; set; } = ArticleStatus.Pending;// "Pending", "Approved", "Rejected"
     
-    public int AuthorId { get; set; } //nếu viết int? nó sẽ cho phép trường này NULL
     [ForeignKey("AuthorId")]
+    public int AuthorId { get; set; } //nếu viết int? nó sẽ cho phép trường này NULL
     
-    public required User Author { get; set; }
+    
+    public virtual User Author { get; set; }
+    
+    [ForeignKey("Topic")]
+    public int TopicId { get; set; }
+    public virtual Topic Topic { get; set; }
 }

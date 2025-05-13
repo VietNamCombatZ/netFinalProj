@@ -3,3 +3,21 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# Các file cấu hình IDE
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+riderModule.iml
+
+# Các thư mục cache và tệp tạm thời của ReSharper
+/_ReSharper.Caches/
+
+# Tệp hệ thống của Windows
+Thumbs.db
+
+# Tệp hệ thống của macOS
+.DS_Store

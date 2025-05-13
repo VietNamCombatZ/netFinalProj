@@ -2,23 +2,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http;
 
-public class RoleAuthorizationFilter : IAuthorizationFilter
+namespace finalProject.Controllers.Filter
 {
-    private readonly string _requiredRole;
-
-    public RoleAuthorizationFilter(string requiredRole)
+    public class RoleAuthorizationFilter : IAuthorizationFilter
     {
-        _requiredRole = requiredRole;
-    }
+        private readonly string _requiredRole;
 
-    public void OnAuthorization(AuthorizationFilterContext context)
-    {
-        var userRole = context.HttpContext.User?.FindFirst("Role")?.Value;
-
-        if (string.IsNullOrEmpty(userRole) || userRole != _requiredRole)
+        public RoleAuthorizationFilter(string requiredRole)
         {
-            // Nếu role không đúng, redirect về trang lỗi hoặc trang login
-            context.Result = new RedirectToActionResult("AccessDenied", "Home", null);
+            _requiredRole = requiredRole;
         }
-    }
+
+        public void OnAuthorization(AuthorizationFilterContext context)
+        {
+            var userRole = context.HttpContext.User?.FindFirst("Role")?.Value;
+
+            if (string.IsNullOrEmpty(userRole) || userRole != _requiredRole)
+            {
+                // Nếu role không đúng, redirect về trang lỗi hoặc trang login
+                context.Result = new RedirectToActionResult("AccessDenied", "Home", null);
+            }
+        }
+    } 
+    
 }

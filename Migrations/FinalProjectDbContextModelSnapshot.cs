@@ -37,6 +37,9 @@ namespace finalProject.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
@@ -53,15 +56,61 @@ namespace finalProject.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
 
                     b.HasKey("ArticleId");
 
                     b.HasIndex("AuthorId");
 
+                    b.HasIndex("TopicId");
+
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("finalProject.Models.Topic", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TopicId"));
+
+                    b.Property<string>("TopicName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("TopicId");
+
+                    b.ToTable("Topics");
+
+                    b.HasData(
+                        new
+                        {
+                            TopicId = 1,
+                            TopicName = "Trí tuệ nhân tạo"
+                        },
+                        new
+                        {
+                            TopicId = 2,
+                            TopicName = "Khoa học dữ liệu"
+                        },
+                        new
+                        {
+                            TopicId = 3,
+                            TopicName = "Mạng máy tính"
+                        },
+                        new
+                        {
+                            TopicId = 4,
+                            TopicName = "An toàn thông tin"
+                        },
+                        new
+                        {
+                            TopicId = 5,
+                            TopicName = "Công nghệ phần mềm"
+                        });
                 });
 
             modelBuilder.Entity("finalProject.Models.User", b =>
@@ -98,17 +147,47 @@ namespace finalProject.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1001,
+                            DateofBirth = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@sciencehub.com",
+                            Name = "Nguyễn Văn Quản Trị",
+                            Password = "admin123",
+                            Role = "Admin",
+                            Username = "admin01"
+                        });
                 });
 
             modelBuilder.Entity("finalProject.Models.Article", b =>
                 {
                     b.HasOne("finalProject.Models.User", "Author")
-                        .WithMany()
+                        .WithMany("Articles")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("finalProject.Models.Topic", "Topic")
+                        .WithMany("Articles")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("finalProject.Models.Topic", b =>
+                {
+                    b.Navigation("Articles");
+                });
+
+            modelBuilder.Entity("finalProject.Models.User", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,27 +10,120 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    @using Microsoft.AspNetCore.Http
+    @* @{ *@
+    @*     var username = Context.Session.GetString("Username"); *@
+    @* } *@
+    @{
+        var username = Context.Session.GetString("Username");
+        var role = Context.Session.GetString("Role"); // bạn cần lưu "Role" vào session sau khi đăng nhập
+        string controller = "Home";
+        string action = "Index";
+
+        if (!string.IsNullOrEmpty(username))
+        {
+            if (role == "Admin")
+            {
+                controller = "Users";
+                action = "AdminDashboard";
+            }
+            else if (role == "Author")
+            {
+                controller = "Users";
+                action = "Dashboard"; // hoặc tên action phù hợp
+            }
+        }
+    }
+    
+    @* v1 *@
+    @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
+    @*     <div class="container-fluid"> *@
+    @*         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">finalProject</a> *@
+    @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+    @*                 aria-expanded="false" aria-label="Toggle navigation"> *@
+    @*             <span class="navbar-toggler-icon"></span> *@
+    @*         </button> *@
+    @*         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
+    @*             <ul class="navbar-nav flex-grow-1"> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+    @*                 </li> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
+    @*                 </li> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Đăng nhập</a> *@
+    @*                 </li> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Đăng ký</a> *@
+    @*                 </li> *@
+    @*             </ul> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </nav> *@
+    
+    @* v2 *@
+    @* <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> *@
+    @*     <div class="container-fluid"> *@
+    @*         <a class="navbar-brand" href="/">QL Bài viết KH</a> *@
+    @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> *@
+    @*             <span class="navbar-toggler-icon"></span> *@
+    @*         </button> *@
+    @*         <div class="collapse navbar-collapse" id="navbarNav"> *@
+    @*             <ul class="navbar-nav me-auto"> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link active" href="/">Trang chủ</a> *@
+    @*                 </li> *@
+    @*             </ul> *@
+    @*             <ul class="navbar-nav"> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link " asp-controller="Users" asp-action="Login">Đăng nhập</a> *@
+    @*                 </li> *@
+    @*                 <li class="nav-item"> *@
+    @*                     <a class="nav-link " asp-controller="Users" asp-action="Register">Đăng ký</a> *@
+    @*                 </li> *@
+    @*             </ul> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </nav> *@
+    
+    @* v3 *@
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">finalProject</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" asp-controller="@controller" asp-action="@action">SciPost</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link active" asp-controller="@controller" asp-action="@action">Trang chủ</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Users" asp-action="Login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Users" asp-action="Register">Đăng ký</a>
-                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    @if (string.IsNullOrEmpty(username))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Users" asp-action="Login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Users" asp-action="Register">Đăng ký</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                @* <i class="bi bi-person-circle"></i>  *@
+                                @username
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" asp-controller="Users" asp-action="Profile">Thông tin cá nhân</a></li>
+                                <li><a class="dropdown-item" asp-controller="Users" asp-action="Logout">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -48,7 +141,18 @@
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+@* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" *@
+@*         integrity="sha384-HfUQ8ZnK5P1pFh0P0p2g+4JocURUSFvZp3+FZ8FwKD2UEh3KxjAOp+jR6qrsB/4G" *@
+@*         crossorigin="anonymous"></script> *@
+
+@* <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script> *@
+
+@* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -1,18 +1,28 @@
-@model TModel
-
 @{
-    Layout = null;
+    ViewData["Title"] = "Admin Dashboard";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div class="w-100 text-center">
+    <h2 >Trang quản trị (Admin)</h2>
 </div>
-</body>
-</html>
+
+
+@* <div class="d-grid gap-3 mt-4"> *@
+@*     <a class="btn btn-primary" asp-action="PendingArticles" asp-controller="Articles">📄 Xem bài viết chờ duyệt</a> *@
+@*     <a class="btn btn-secondary" asp-action="AdminList" asp-controller="Users">👤 Quản lý Admin</a> *@
+@*     $1$ <a class="btn btn-success" asp-action="Statistics" asp-controller="Articles">📊 Thống kê bài viết</a> #1# *@
+@*     <a class="btn btn-success" asp-action="Statistics" asp-controller="Articles">📊 Thống kê bài viết</a> *@
+@* *@
+@* *@
+@* </div> *@
+<div class="row g-4">
+    <div class="col-md-4">
+        <a class="btn btn-primary w-100 py-3" asp-action="PendingArticles" asp-controller="Articles">📄 Xem bài viết chờ duyệt</a>
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-secondary w-100 py-3" asp-action="AdminList" asp-controller="Users">👤 Quản lý Admin</a>
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-success w-100 py-3" asp-action="Statistics" asp-controller="Articles">📊 Thống kê bài viết</a>
+    </div>
+</div>
+

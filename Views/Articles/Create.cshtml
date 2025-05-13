@@ -1,18 +1,46 @@
-@model TModel
-
+@model finalProject.Models.ViewModels.CreateArticleViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Tạo Bài Viết";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
-<!DOCTYPE html>
+<h2>@ViewData["Title"]</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+}
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Summary" class="form-label"></label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TopicId" class="form-label"></label>
+        <select asp-for="TopicId" asp-items="@(new SelectList(Model.Topics, "TopicId", "TopicName"))" class="form-select">
+            <option value="">-- Chọn chủ đề --</option>
+        </select>
+        <span asp-validation-for="TopicId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Tạo bài viết</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

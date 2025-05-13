@@ -1,18 +1,81 @@
-@model TModel
 
+
+@using finalProject.Models.Enums
+@model IEnumerable<finalProject.Models.Article>
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<h2>Danh sách bài viết của bạn</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Tiêu đề</th>
+        <th>Tóm tắt</th>
+        <th>Trạng thái</th>
+        <th>Ngày đăng</th>
+    </tr>
+    </thead>
+    <tbody>
+    @* @foreach (var article in Model) *@
+    @* { *@
+    @*     <tr> *@
+    @*         <td>@article.Title</td> *@
+    @*         <td>@article.Summary</td> *@
+    @*         <td> *@
+    @*             @if (article.Status == ArticleStatus.Pending) *@
+    @*             { *@
+    @*                 <span class="badge bg-warning">Chờ duyệt</span> *@
+    @*             } *@
+    @*             else if (article.Status == ArticleStatus.Approved) *@
+    @*             { *@
+    @*                 <span class="badge bg-success">Đã duyệt</span> *@
+    @*             } *@
+    @*             else if (article.Status == ArticleStatus.Rejected) *@
+    @*             { *@
+    @*                 <span class="badge bg-danger">Bị từ chối</span> *@
+    @*             } *@
+    @*         </td> *@
+    @*         <td>@article.SubmissionDate.ToString("dd/MM/yyyy")</td> *@
+    @*     </tr> *@
+    @* } *@
+
+    @foreach (var article in Model)
+    {
+        <tr>
+            <td>@article.Title</td>
+            <td>@article.Summary</td>
+            <td>
+                @if (article.Status == ArticleStatus.Pending)
+                {
+                    <span class="badge bg-warning">Chờ duyệt</span>
+                }
+                else if (article.Status == ArticleStatus.Approved)
+                {
+                    <span class="badge bg-success">Đã duyệt</span>
+                }
+                else if (article.Status == ArticleStatus.Rejected)
+                {
+                    <span class="badge bg-danger">Bị từ chối</span>
+                }
+            </td>
+            <td>@article.SubmissionDate.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "Articles", new { id = article.ArticleId })">Xem chi tiết</a>
+
+                @* Hiển thị nút huỷ nếu bài viết đang chờ duyệt *@
+                @if (article.Status == ArticleStatus.Pending)
+                {
+                    <form asp-action="Cancel" asp-controller="Articles" asp-route-id="@article.ArticleId" method="post" class="d-inline"
+                          onsubmit="return confirm('Bạn có chắc muốn huỷ bài viết này không?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Huỷ</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+

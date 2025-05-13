@@ -1,18 +1,132 @@
-@model TModel
-
+@using finalProject.Models.ViewModels  <!-- Thay bằng namespace chứa AuthorStats & TopicStats -->
+@using System.Text.Json
 @{
-    Layout = null;
+    ViewData["Title"] = "Thống kê bài viết";
+
+    var authorStats = ViewBag.ByAuthor as List<AuthorStats>;
+    var topicStats = ViewBag.ByTopic as List<TopicStats>;
+
+    var topicLabels = JsonSerializer.Serialize(topicStats.Select(t => t.Topic));
+    var topicData = JsonSerializer.Serialize(topicStats.Select(t => t.Count));
+
+    var approved = ViewBag.ApprovedCount;
+    var pending = ViewBag.PendingCount;
 }
 
-<!DOCTYPE html>
+<h2>📊 Thống kê bài viết</h2>
+<hr />
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<!-- 1. Theo tác giả -->
+<div class="mt-4">
+    <h4>1. Số lượng bài viết theo tác giả</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Tác giả</th>
+            <th>Số lượng bài viết</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var author in authorStats)
+        {
+            <tr>
+                <td>@author.Username</td>
+                <td>@author.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
-</body>
-</html>
+
+<!-- 2. Theo chủ đề -->
+<div class="mt-4">
+    <h4>2. Số lượng bài viết theo chủ đề</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Chủ đề</th>
+            <th>Số lượng bài viết</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var topic in topicStats)
+        {
+            <tr>
+                <td>@topic.Topic</td>
+                <td>@topic.Count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<!-- 3. Đã duyệt / Chưa duyệt -->
+<div class="mt-4">
+    <h4>3. Trạng thái bài viết</h4>
+    <ul class="list-group w-50">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            ✅ Bài đã duyệt
+            <span class="badge bg-success rounded-pill">@approved</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            ⏳ Bài chưa duyệt
+            <span class="badge bg-warning text-dark rounded-pill">@pending</span>
+        </li>
+    </ul>
+</div>
+
+<!-- 4. Biểu đồ theo chủ đề -->
+<div class="mt-5">
+    <h4>4. Biểu đồ bài viết theo chủ đề</h4>
+    <div style="width: 400px; height: 400px;">
+        <canvas id="topicChart" width="200px" height="200px"></canvas>
+    </div>
+    
+</div>
+
+<!-- 5. Biểu đồ duyệt / chưa duyệt -->
+<div class="mt-5">
+    <h4>5. Biểu đồ bài viết đã duyệt / chưa duyệt</h4>
+    <div style="width: 400px; height: 400px;">
+        <canvas id="statusChart" width="200px" height="200px"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const topicLabels = @Html.Raw(topicLabels);
+    const topicData = @Html.Raw(topicData);
+
+    const approved = @approved;
+    const pending = @pending;
+
+    // Biểu đồ chủ đề
+    const topicChart = new Chart(document.getElementById("topicChart"), {
+        type: 'pie',
+        data: {
+            labels: topicLabels,
+            datasets: [{
+                label: 'Bài viết theo chủ đề',
+                data: topicData,
+                backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Biểu đồ trạng thái
+    const statusChart = new Chart(document.getElementById("statusChart"), {
+        type: 'pie',
+        data: {
+            labels: ['Đã duyệt', 'Chưa duyệt'],
+            datasets: [{
+                label: 'Trạng thái bài viết',
+                data: [approved, pending],
+                backgroundColor: ['#28a745', '#ffc107'],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>

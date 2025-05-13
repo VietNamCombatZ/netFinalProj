@@ -1,18 +1,48 @@
-@model TModel
+@model finalProject.Models.Article
+@using finalProject.Models.Enums
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Chi tiết bài viết";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<h2>Chi tiết bài viết</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">@Model.Title</h3>
+        <h5 class="card-subtitle mb-2 text-muted">Chủ đề: @Model.Topic?.TopicName</h5>
+        <p class="card-text"><strong>Tóm tắt:</strong> @Model.Summary</p>
+        <p class="card-text"><strong>Nội dung:</strong></p>
+        <div class="border p-2" style="white-space: pre-wrap">@Model.Content</div>
+
+        <hr />
+
+        <p>
+            <strong>Trạng thái:</strong>
+            @if (Model.Status == ArticleStatus.Pending)
+            {
+                <span class="badge bg-warning">Chờ duyệt</span>
+            }
+            else if (Model.Status == ArticleStatus.Approved)
+            {
+                <span class="badge bg-success">Đã duyệt</span>
+            }
+            else if (Model.Status == ArticleStatus.Rejected)
+            {
+                <span class="badge bg-danger">Bị từ chối</span>
+            }
+        </p>
+
+        <p><strong>Ngày gửi:</strong> @Model.SubmissionDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+        @if (Model.ReviewedAt != null)
+        {
+            <p>
+                <strong>Ngày duyệt/từ chối:</strong> @Model.ReviewedAt?.ToString("dd/MM/yyyy HH:mm")
+            </p>
+        }
+
+        <a class="btn btn-secondary mt-3" asp-action="MyArticles" asp-controller="Articles">Quay lại danh sách</a>
+    </div>
 </div>
-</body>
-</html>

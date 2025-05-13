@@ -1,18 +1,12 @@
-@model TModel
+@model finalProject.Models.User
 
-@{
-    Layout = null;
-}
+<h2>Thông tin cá nhân</h2>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
 <div>
-      
+    <p><strong>Họ và Tên:</strong> @Model.Name</p>
+    <p><strong>Ngày sinh:</strong> @Model.DateofBirth.ToString("dd/MM/yyyy")</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Tên đăng nhập:</strong> @Model.Username</p>
+
+    @* <a href="@Url.Action("EditProfile", "Users")">Chỉnh sửa thông tin</a> *@
 </div>
-</body>
-</html>

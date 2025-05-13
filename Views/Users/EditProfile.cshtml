@@ -1,18 +1,17 @@
-@model TModel
+@model finalProject.Models.User
 
-@{
-    Layout = null;
-}
+<h2>Chỉnh sửa thông tin cá nhân</h2>
 
-<!DOCTYPE html>
+<form method="post">
+    <div class="form-group">
+        <label for="Name">Họ và Tên</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+    </div>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+    <div class="form-group">
+        <label for="DateofBirth">Ngày sinh</label>
+        <input type="date" class="form-control" id="DateofBirth" name="DateofBirth" value="@Model.DateofBirth.ToString("yyyy-MM-dd")" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+</form>

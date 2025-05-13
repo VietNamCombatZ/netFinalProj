@@ -15,8 +15,15 @@ builder.Services.AddDbContext<FinalProjectDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 42)) // <-- đúng version MySQL bạn đang dùng
     )
 );
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // thời gian sống của session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,6 +37,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
